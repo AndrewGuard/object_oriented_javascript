@@ -1,0 +1,60 @@
+<div class="container">
+  <h1>Welcome to Java Racer!</h1>
+
+  <% if @player1 && @player2 %>
+    <p> This matchup will feature the interminable <%= @player1.name %> versus the fledgling <%= @player2.name %> </p>
+  <% end %>
+
+  <form action="/" method="get" name="input_box">
+    <input type="submit" value="race again!">
+  </form> <br> <br>
+
+  <table class="racer_table">
+
+    <tr id="player1_strip" data-player_title="player_1">
+      <td class="active"></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr id="player2_strip" data-player_title="player_2">
+      <td class="active"></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+
+<div class="container">
+  <h2> Login or logout </h2>
+  <form action="/login_players" method="POST" name="input_box">
+    Player1:<input type="text" name="player1_name" id="player1">
+    Player2:<input type="text" name="player2_name" id="player2">
+    <br><br>
+    <input type="submit" value="submit">
+  </form>
+  <br>
+
+  <form action="/logout" method="get" name="input_box">
+
+    <input type="submit" value="logout">
+  </form>
+</div>
