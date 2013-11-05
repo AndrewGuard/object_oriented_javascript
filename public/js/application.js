@@ -1,72 +1,67 @@
-$(document).ready(function() {
+function Game(players) {
+  this.players = players;
+}
 
-  var player1 = new Player("Jorge");
-  var player2 = new Player("Andres");
-  // alert('player1 is named' player1.name);
-
-  // var game = new Game(player1, player2)
-
-  $(document).on('keyup', function(event) {
-    if ( event.keyCode == 81 && !isFinished() )
-    {
-      var player1_current = getCurrentspot(1);
-      var player1_next = getNextspot(1);
-      movePlayer(player1_current, player1_next);
-    }
-    if ( event.keyCode == 80 && !isFinished() )
-    {
-      var player2_current = getCurrentspot(2);
-      var player2_next = getNextspot(2);
-      movePlayer(player2_current, player2_next);
-    }
-  });
-
-// ================= HELPERS ============================================================================================
-
-
-
-
-
-  function isFinished()
-  {
-    if ( $('#player1_strip').find('td').last().attr('class') == "active" ||
-     $('#player2_strip').find('td').last().attr('class') == "active" )
-    {
+Game.prototype.finished = function() {
+  for(var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    if(player.finished()) {
       return true;
-    } else {
-      return false;
     }
   }
+  return false;
+}
 
-  function movePlayer(current, next)
-  {
-    current.removeAttr('class');
-    next.attr('class', 'active');
-  }
 
-  function getCurrentspot(player)
-  {
-    if (player == 1)
+Game.prototype.findPlayerByKeycode = function(keycode) {
+  for(var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    if ( keycode == player.keycode )
     {
-      return $('#player1_strip').find('.active');
+      return player;
     }
-    if (player == 2)
-    {
-      return $('#player2_strip').find('.active');
-    }
-    return null;
   }
+  return null;
+}
 
-  function getNextspot(player)
-  {
-    if (player == 1)
-    {
-      return $('#player1_strip').find('.active').closest('td').next();
+
+function Player(name, track, keycode) {
+  this.name = name;
+  this.track = track;
+  this.keycode = keycode;
+}
+
+Player.prototype.move = function() {
+  var current = $(this.track).find('.active');
+  var next =    current.closest('td').next();
+  current.removeAttr('class');
+  next.attr('class', 'active');
+}
+
+Player.prototype.finished = function() {
+  return $(this.track).find('td').last().hasClass("active");
+}
+
+var player1 = new Player("Jorge", "#player1_strip", 80);
+var player2 = new Player("Andres", "#player2_strip", 81);
+
+var game = new Game([player1, player2]);
+
+
+var keyUpHandler = function(event) {
+  if(!game.finished()) {
+    player = game.findPlayerByKeycode(event.which);
+    if(player) {
+      player.move();
     }
-    if (player == 2)
-    {
-      return $('#player2_strip').find('.active').closest('td').next();
-    }
-    return null;
   }
+}
+
+$(document).ready(function() {
+  $(document).on('keyup', keyUpHandler);
 });
+
+
+
+
+
