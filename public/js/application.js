@@ -24,6 +24,14 @@ Game.prototype.findPlayerByKeycode = function(keycode) {
   return null;
 }
 
+Game.prototype.keyUpHandler = function(event) {
+  if(!this.finished()) {
+    player = this.findPlayerByKeycode(event.which);
+    if(player) {
+      player.move();
+    }
+  }
+}
 
 function Player(name, track, keycode) {
   this.name = name;
@@ -48,17 +56,8 @@ var player2 = new Player("Andres", "#player2_strip", 81);
 var game = new Game([player1, player2]);
 
 
-var keyUpHandler = function(event) {
-  if(!game.finished()) {
-    player = game.findPlayerByKeycode(event.which);
-    if(player) {
-      player.move();
-    }
-  }
-}
-
 $(document).ready(function() {
-  $(document).on('keyup', keyUpHandler);
+  $(document).on('keyup', game.keyUpHandler.bind(game));
 });
 
 
